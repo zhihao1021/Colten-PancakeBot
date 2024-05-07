@@ -1,21 +1,43 @@
-from pydantic import BaseModel
-
-from typing import Optional
+from pydantic import BaseModel, Field
 
 
-class User(BaseModel):
-    user_id: int
-    money: int = 0
-    pancake: int = 0
-    experience: int = 0
-    stock: dict[str, int] = {}
-    mining_time: int = 0
-
-
-class UserUpdate(BaseModel):
-    user_id: Optional[int] = None
-    money: Optional[int] = None
-    pancake: Optional[int] = None
-    experience: Optional[int] = None
-    stock: Optional[dict[str, int]] = None
-    mining_time: Optional[int] = None
+class UserData(BaseModel):
+    id: int = Field(
+        title="User ID",
+        description="Discord user id"
+    )
+    money: int = Field(
+        default=0,
+        title="Money",
+        description="Money owned by the user"
+    )
+    pancake: int = Field(
+        default=0,
+        title="Pancake",
+        description="Pancake owned by the user"
+    )
+    bank_money: int = Field(
+        default=0,
+        title="Bank Money",
+        description="Money stored in bank"
+    )
+    bank_limit: int = Field(
+        default=1000,
+        title="Bank Limit",
+        description="User's bank limit"
+    )
+    experience: int = Field(
+        default=0,
+        title="Experience",
+        description="User's experience"
+    )
+    stock: dict[str, int] = Field(
+        default={},
+        title="Stock",
+        description="Stock owned by the user, key is stock id and value is count"
+    )
+    mining_time: int = Field(
+        default=0,
+        title="Mining Time",
+        description="Timestamp when user start mining"
+    )

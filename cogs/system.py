@@ -3,14 +3,13 @@ from discord import ApplicationContext, Bot, Option, SlashCommandGroup
 from orjson import loads
 
 from subprocess import run, PIPE
-from config import MANAGERS
+from config import BOT_MANAGERS
 
-from .base import GroupCog
-from .schema import CogConfig
+from .base import GroupCog, CogConfig
 
 
 async def check_is_manager(ctx: ApplicationContext) -> bool:
-    if ctx.author.id in MANAGERS:
+    if ctx.author.id in BOT_MANAGERS:
         return True
     await ctx.respond("Permission denied")
     return False
@@ -32,18 +31,19 @@ class System(GroupCog):
                 item[0]: CogConfig(**item[1])
                 for item in raw_config.items()
             }
-        for cog_path in map(
-            lambda data: data.path,
-            filter(
-                lambda data: data.load_on_start,
-                self.cogs_data.values()
-            )
-        ):
+        for cog_path in map(lambda data: data.path, filter(
+            lambda data: data.load_on_start,
+            self.cogs_data.values()
+        )):
             self.bot.load_extension(cog_path)
 
     async def update_cogs_data(self):
         async with async_open("cogs/cogs.json", "rb") as cogs_file:
-            self.cogs_data = loads(await cogs_file.read())
+            raw_config: dict = loads(await cogs_file.read())
+            self.cogs_data: dict[str, CogConfig] = {
+                item[0]: CogConfig(**item[1])
+                for item in raw_config.items()
+            }
 
     @property
     def all_cogs(self) -> list[str]:

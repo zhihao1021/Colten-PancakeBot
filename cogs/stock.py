@@ -8,27 +8,21 @@ from discord import (
     SlashCommandGroup
 )
 
-from asyncio import Task
+from config import BOT_EMBED_FOOTER_TEXT, BOT_EMBED_FOOTER_IMAGE
+from schemas import StockData, StockDataOnlyId
 
-from crud.stock import CRUDStock
-from schemas import Stock, StockUpdate, UserUpdate
-
-from .base import GroupCog, UserCog
+from .base import GroupCog
 
 
-class StockSystem(GroupCog, UserCog):
-    bot: Bot
-    crud_stock = CRUDStock()
+class StockSystem(GroupCog):
     group = SlashCommandGroup(
         name="stock",
-        description="Stock"
+        description="Stock system"
     )
 
-    def __init__(self, bot: Bot):
-        self.bot = bot
-    
-    async def get_stock_code_list(self, *args) -> list[str]:
-        return await self.crud_stock.get_all_code()
+    async def get_stock_code_list(self, *args) -> tuple[str]:
+        stock_code_list = await StockData.find_all(projection_model=StockDataOnlyId).to_list()
+        return tuple(map(lambda stock: stock.id, stock_code_list))
 
     @group.command(
         name="query",
@@ -48,7 +42,7 @@ class StockSystem(GroupCog, UserCog):
         ctx: ApplicationContext,
         stock_code: str
     ):
-        stock = await self.crud_stock.get_by_code(stock_code)
+        stock = await StockData.get(stock_code)
         if stock is None:
             await ctx.respond("根本沒這個股票，搞什麼")
             return
@@ -63,9 +57,19 @@ class StockSystem(GroupCog, UserCog):
             image=stock.info.image,
             thumbnail=stock.info.thumbnail,
             footer=EmbedFooter(
-                text="美麗果民主共和國",
-                icon_url="https://cdn.discordapp.com/icons/1180905078379520061/8433926f318fa5e118bd780a52603b54.webp"
+                text=BOT_EMBED_FOOTER_TEXT,
+                icon_url=BOT_EMBED_FOOTER_IMAGE
             )
+        )
+        embed.add_field(
+            name="當前股價",
+            value=stock.price,
+            inline=True
+        )
+        embed.add_field(
+            name="前次漲跌",
+            value=stock.delta,
+            inline=True
         )
         for field in stock.info.fields:
             embed.add_field(**field.model_dump())

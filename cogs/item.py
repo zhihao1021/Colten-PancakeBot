@@ -1,19 +1,16 @@
 from discord import ApplicationContext, Bot, SlashCommandGroup
 
-from schemas import UserUpdate
+from schemas import UserDataRelation
 
-from .base import GroupCog, UserCog
+from .base import GroupCog
 
 
-class ItemSystem(GroupCog, UserCog):
+class ItemSystem(GroupCog):
     bot: Bot
     group = SlashCommandGroup(
         name="item",
-        description="Item"
+        description="Item system"
     )
-
-    def __init__(self, bot):
-        self.bot = bot
 
     @group.command(
         name="pay_card",
@@ -23,10 +20,11 @@ class ItemSystem(GroupCog, UserCog):
         self,
         ctx: ApplicationContext
     ):
+        # Get user data
         user_id = ctx.author.id
-        user = await self.get_user(user_id)
+        user = await UserDataRelation.get(user_id)
 
-        if user.pancake < 20:
+        if user is None or user.pancake < 20:
             await ctx.respond("你的鬆餅數量不足")
             return
 
@@ -38,11 +36,12 @@ class ItemSystem(GroupCog, UserCog):
             await ctx.respond("你沒有負債但你也沒有錢，可撥")
             return
 
-        user_update = UserUpdate(
-            money=0,
-            pancake=user.pancake - 20
-        )
-        await self.crud_user.update_by_user_id(user_id, user_update)
+        # Update user's money and pancake
+        user.money = 0
+        user.pancake -= 20
+
+        # Save modify
+        await user.save()
 
         await ctx.respond("你使用了還債卡，讓你的負債歸 0 了！繼續努力，小心偷錢")
 

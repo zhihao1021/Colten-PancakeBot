@@ -160,7 +160,3 @@ cython_debug/
 #.idea/
 
 config*.json
-data
-*~
-test*
-token.json

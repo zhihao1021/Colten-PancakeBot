@@ -1,0 +1,42 @@
+{
+    "Fishing": {
+        "path": "cogs.fishing",
+        "description": "Fishing",
+        "load_on_start": true
+    },
+    "BankSystem": {
+        "path": "cogs.bank",
+        "description": "Bank",
+        "load_on_start": true
+    },
+    "StockSystem": {
+        "path": "cogs.stock",
+        "description": "Stock",
+        "load_on_start": true
+    },
+    "ItemSystem": {
+        "path": "cogs.item",
+        "description": "item",
+        "load_on_start": true
+    },
+    "MiningSystem": {
+        "path": "cogs.mining",
+        "description": "mining",
+        "load_on_start": true
+    },
+    "WorkSystem": {
+        "path": "cogs.work",
+        "description": "work",
+        "load_on_start": true
+    },
+    "CodeforcesSystem": {
+        "path": "cogs.codeforces",
+        "description": "codeforces",
+        "load_on_start": true
+    },
+    "BillingSystem":{
+        "path": "cogs.billing",
+        "description": "billing",
+        "load_on_start": true
+    }
+}

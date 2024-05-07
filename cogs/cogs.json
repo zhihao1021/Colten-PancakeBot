@@ -1,42 +1,22 @@
 {
     "Fishing": {
         "path": "cogs.fishing",
-        "description": "Fishing",
+        "description": "Fishing System",
         "load_on_start": true
     },
-    "BankSystem": {
-        "path": "cogs.bank",
-        "description": "Bank",
+    "Economy": {
+        "path": "cogs.economy",
+        "description": "Economy System",
         "load_on_start": true
     },
-    "StockSystem": {
-        "path": "cogs.stock",
-        "description": "Stock",
-        "load_on_start": true
-    },
-    "ItemSystem": {
+    "Item": {
         "path": "cogs.item",
-        "description": "item",
+        "description": "Item System",
         "load_on_start": true
     },
-    "MiningSystem": {
-        "path": "cogs.mining",
-        "description": "mining",
-        "load_on_start": true
-    },
-    "WorkSystem": {
-        "path": "cogs.work",
-        "description": "work",
-        "load_on_start": true
-    },
-    "CodeforcesSystem": {
-        "path": "cogs.codeforces",
-        "description": "codeforces",
-        "load_on_start": true
-    },
-    "BillingSystem":{
-        "path": "cogs.billing",
-        "description": "billing",
+    "Stock": {
+        "path": "cogs.stock",
+        "description": "Stock System",
         "load_on_start": true
     }
 }
